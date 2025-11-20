@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "title": "የወደፊት ህይወትዎን ሊቀይሩ የሚችሉ ትምህርቶችን ይውሰዱ",
+    "subtitle": "በእኛ የኦንላይን ኮርሶች የሚፈልጉትን ትምህርት መርጠው ይማሩ። በፈለጋቹበት ጊዜ፣ በየትኛውም ቦታ ይማሩ።",
+    "cta": "አሁኑኑ ይመዝግቡ",
+    "watchIntro": "መግቢያ ይመልከቱ",
+    "talkToExpert": "አሁኑኑ ይመዝግቡ",
+    "videoOverview": "3 ደቂቃ አጠቃላይ እይታ",
+    "feature1": {
+      "title": "ኳንተም-ኃይል",
+      "description": "የሚስተካከል የማስተማር ቴክኖሎጂ"
+    },
+    "feature2": {
+      "title": "የሁለት ቋንቋ",
+      "description": "እንግሊዘኛ እና አማርኛ ድጋፍ"
+    },
+    "feature3": {
+      "title": "የግል",
+      "description": "ብጁ የማስተማር ጉዞ"
+    }
+  },
+  "features": {
+    "title": "ለምን እኛን ይመርጣሉ?",
+    "feature1": {
+      "title": "የሙያ አስተማሪዎች",
+      "description": "ከዓመታት ልምድ ያላቸው የኢንዱስትሪ ሙያዎች ይማሩ"
+    },
+    "feature2": {
+      "title": "የሚመች ማስተማር",
+      "description": "በራስዎ ፍጥነት፣ በሚመችዎት ጊዜ እና ቦታ ይማሩ"
+    },
+    "feature3": {
+      "title": "ተግባራዊ ክህሎቶች",
+      "description": "ከእውነተኛ የዓለም ፕሮጀክቶች ጋር ተግባራዊ ልምድ ያግኙ"
+    }
+  },
+  "navigation": {
+    "home": "መነሻ",
+    "courses": "ኮርሶች",
+    "about": "ስለእኛ",
+    "contact": "ያግኙን",
+    "login": "ግባ",
+    "register": "ይመዝግቡ",
+    "dashboard": "ዳሽቦርድ",
+    "logout": "ውጣ"
+  },
+  "auth": {
+    "login": "ግባ",
+    "register": "ይመዝግቡ",
+    "email": "ኢሜይል",
+    "password": "የይለፍ ቃል",
+    "fullName": "ሙሉ ስም",
+    "phone": "የስልክ ቁጥር",
+    "emailOrPhone": "ኢሜይል ወይም የስልክ ቁጥር",
+    "emailOrPhonePlaceholder": "ኢሜይልዎን ወይም የስልክ ቁጥርዎን ያስገቡ",
+    "emailOrPhoneHint": "ኢሜይልዎን ወይም የስልክ ቁጥርዎን በመጠቀም መግባት ይችላሉ",
+    "confirmPassword": "የይለፍ ቃል ያረጋግጡ",
+    "title": "ርዕስ",
+    "selectTitle": "ርዕስ ይምረጡ",
+    "paymentReceipt": "የመክፈያ ደረሰኝ",
+    "depositRequired": "የተጠየቀ ቅድሚያ ክፍያ",
+    "forgotPassword": "የይለፍ ቃልዎን ረሱ?",
+    "noAccount": "መለያ የሎትም?",
+    "hasAccount": "ቀድሞውኑ መለያ አለዎት?",
+    "signIn": "ግባ",
+    "signUp": "ይመዝግቡ",
+    "loggingIn": "በመግባት ላይ...",
+    "registering": "በመመዝገብ ላይ...",
+    "backToHome": "ወደ መነሻ ተመለስ",
+    "welcomeBack": "እንኳን በደህና መጡ",
+    "createAccount": "መለያዎን ይፍጠሩ",
+    "getStarted": "ከኳንተም LMS ይጀምሩ",
+    "pendingApproval": "የመመዝገብ ማጽደቅ በመጠባበቅ ላይ",
+    "pendingStatus": "መጽደቅ በመጠባበቅ ላይ",
+    "pendingMessage": "የእርስዎ ምዝገባ ቀርቧል እና በአሁኑ ጊዜ የአስተዳዳሪ ማጽደቅ በመጠባበቅ ላይ ነው።",
+    "pendingDetails": "አስተዳዳሪ የመክፈያ ደረሰኝዎን ይገምግማል እና የመመዝገብዎን ያጽድቃል። አንዴ ከተጽድቀ የተማሪውን ፖርታል መድረስ ይችላሉ።",
+    "checkBackLater": "እባክዎ ቆይተው ይመለከቱ ወይም ጥያቄዎች ካሉዎት ድጋፍ ያግኙን።",
+    "registrationSubmitted": "ምዝገባ ቀርቧል!",
+    "whatHappensNext": "ቀጣይ ምን ይሆናል?",
+    "pendingApprovalItem1": "የመመዝገብዎ ማጽደቅ በመጠባበቅ ላይ ነው",
+    "pendingApprovalItem2": "አስተዳዳሪ የመክፈያ ደረሰኝዎን ይገምግማል",
+    "pendingApprovalItem3": "አንዴ ከተጽድቀ መግባት እና ፖርታሉን መድረስ ይችላሉ",
+    "redirectingToLogin": "በጥቂት ሰከንዶች ውስጥ ወደ መግቢያ ገጽ ይቀየራሉ..."
+  },
+  "dashboard": {
+    "title": "የእኔ ኮርሶች",
+    "welcome": "እንኳን በደህና መጡ",
+    "noCourses": "እስካሁን በማንኛውም ኮርስ አልመዘገቡም።",
+    "noCoursesTitle": "እስካሁን ኮርሶች የሉም",
+    "loadingCourses": "ኮርሶችዎን በመጫን ላይ...",
+    "course": "ኮርስ",
+    "courses": "ኮርሶች",
+    "lesson": "ትምህርት",
+    "lessons": "ትምህርቶች",
+    "noLessonsAvailable": "እስካሁን ትምህርቶች አልተገኙም።",
+    "noCoursesAvailable": "እስካሁን ኮርሶች አልተገኙም።",
+    "error": "ስህተት",
+    "errorMessage": "ውሂብ በመጫን ላይ ስህተት ተፈጥሯል።",
+    "retry": "እንደገና ሞክር",
+    "retrying": "በመሞከር ላይ...",
+    "admin": {
+      "title": "የአስተዳዳሪ ዳሽቦርድ",
+      "subtitle": "የመማሪያ መድረክዎን ያቀናብሩ",
+      "loadingStats": "ስታትስቲክስ በመጫን ላይ...",
+      "pendingEnrolments": "በመጠባበቅ ላይ ያሉ ምዝገባዎች",
+      "totalCourses": "ጠቅላላ ኮርሶች",
+      "totalStudents": "ጠቅላላ ተማሪዎች",
+      "quickActions": "ፈጣን ተግባራት",
+      "role": "አስተዳዳሪ",
+      "reviewEnrolments": {
+        "title": "ምዝገባዎችን ይገምግሙ",
+        "description": "የተማሪ ምዝገባዎችን ያጽድቁ ወይም ውድቅ ያድርጉ"
+      },
+      "manageTitles": {
+        "title": "ርዕሶችን ያቀናብሩ",
+        "description": "ርዕሶችን (ዋና ምድቦች) ይፍጠሩ፣ ያርትዑ እና ያቀናብሩ"
+      },
+      "manageCourses": {
+        "title": "ኮርሶችን ያቀናብሩ",
+        "description": "ኮርሶችን እና PDFዎችን ይፍጠሩ፣ ያርትዑ እና ያቀናብሩ"
+      }
+    },
+    "student": {
+      "role": "ተማሪ"
+    }
+  }
+}
+
+

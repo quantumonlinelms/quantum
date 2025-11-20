@@ -1,0 +1,129 @@
+{
+  "hero": {
+    "title": "Transform Your Future with Quantum Learning",
+    "subtitle": "Master in-demand skills through our comprehensive online courses. Learn at your own pace, from anywhere, anytime.",
+    "cta": "Enroll Now",
+    "watchIntro": "Watch Introduction",
+    "talkToExpert": "Enroll Now",
+    "videoOverview": "3 min overview",
+    "feature1": {
+      "title": "Quantum-Powered",
+      "description": "Adaptive learning technology"
+    },
+    "feature2": {
+      "title": "Bilingual",
+      "description": "English & Amharic support"
+    },
+    "feature3": {
+      "title": "Personalized",
+      "description": "Custom learning journey"
+    }
+  },
+  "features": {
+    "title": "Why Choose Us?",
+    "feature1": {
+      "title": "Expert Instructors",
+      "description": "Learn from industry professionals with years of experience"
+    },
+    "feature2": {
+      "title": "Flexible Learning",
+      "description": "Study at your own pace, whenever and wherever you want"
+    },
+    "feature3": {
+      "title": "Practical Skills",
+      "description": "Get hands-on experience with real-world projects"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "courses": "Courses",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "emailOrPhone": "Email or Phone Number",
+    "emailOrPhonePlaceholder": "Enter your email or phone number",
+    "emailOrPhoneHint": "You can login with either your email address or phone number",
+    "confirmPassword": "Confirm Password",
+    "title": "Title",
+    "selectTitle": "Select a title",
+    "paymentReceipt": "Payment Receipt",
+    "depositRequired": "Deposit Required",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "loggingIn": "Logging in...",
+    "registering": "Registering...",
+    "backToHome": "Back to Home",
+    "welcomeBack": "Welcome Back",
+    "createAccount": "Create Your Account",
+    "getStarted": "Get started with Quantum LMS",
+    "pendingApproval": "Enrolment Pending Approval",
+    "pendingStatus": "PENDING APPROVAL",
+    "pendingMessage": "Your registration has been submitted and is currently pending administrator approval.",
+    "pendingDetails": "An administrator will review your payment receipt and approve your enrolment. Once approved, you will be able to access the student portal.",
+    "checkBackLater": "Please check back later or contact support if you have any questions.",
+    "registrationSubmitted": "Registration Submitted!",
+    "whatHappensNext": "What happens next?",
+    "pendingApprovalItem1": "Your enrolment is currently pending approval",
+    "pendingApprovalItem2": "An admin will review your payment receipt",
+    "pendingApprovalItem3": "You will be able to login and access the portal once approved",
+    "redirectingToLogin": "You will be redirected to the login page in a few seconds..."
+  },
+  "dashboard": {
+    "title": "My Courses",
+    "welcome": "Welcome back",
+    "noCourses": "You are not enrolled in any courses yet.",
+    "noCoursesTitle": "No Courses Yet",
+    "loadingCourses": "Loading your courses...",
+    "course": "Course",
+    "courses": "Courses",
+    "lesson": "Lesson",
+    "lessons": "Lessons",
+    "noLessonsAvailable": "No lessons available yet.",
+    "noCoursesAvailable": "No courses available yet.",
+    "error": "Error",
+    "errorMessage": "An error occurred while loading data.",
+    "retry": "Retry",
+    "retrying": "Retrying...",
+    "admin": {
+      "title": "Admin Dashboard",
+      "subtitle": "Manage your learning platform",
+      "loadingStats": "Loading statistics...",
+      "pendingEnrolments": "Pending Enrolments",
+      "totalCourses": "Total Courses",
+      "totalStudents": "Total Students",
+      "quickActions": "Quick Actions",
+      "role": "Admin",
+      "reviewEnrolments": {
+        "title": "Review Enrolments",
+        "description": "Approve or decline student registrations"
+      },
+      "manageTitles": {
+        "title": "Manage Titles",
+        "description": "Create, edit, and manage titles (main categories)"
+      },
+      "manageCourses": {
+        "title": "Manage Courses",
+        "description": "Create, edit, and manage courses and PDFs"
+      }
+    },
+    "student": {
+      "role": "Student"
+    }
+  }
+}
+
+
