@@ -20,12 +20,12 @@ export const AuthProvider = ({ children }) => {
 
   // Ensure loading is always cleared, even on refresh
   useEffect(() => {
-    // If loading is still true after 2 seconds, force it to false (silently)
+    // If loading is still true after 1.5 seconds, force it to false (silently)
     const forceClearLoading = setTimeout(() => {
       if (loading) {
         setLoading(false)
       }
-    }, 2000)
+    }, 1500)
 
     return () => clearTimeout(forceClearLoading)
   }, [loading])
@@ -45,13 +45,14 @@ export const AuthProvider = ({ children }) => {
     const createFallbackProfile = () => {
       if (sessionData?.user) {
         const metadata = sessionData.user.user_metadata || {}
+        const userRole = metadata.role || 'student'
         return {
           id: userId,
           email: sessionData.user.email || '',
           full_name: metadata.full_name || '',
           phone: metadata.phone || '',
-          role: metadata.role || 'student',
-          approved: false,
+          role: userRole,
+          approved: userRole === 'admin' ? true : false,
         }
       }
       return null
@@ -142,18 +143,25 @@ export const AuthProvider = ({ children }) => {
           const { data: { session } } = await supabase.auth.getSession()
           if (session?.user && mounted) {
             const metadata = session.user.user_metadata || {}
+            const userRole = metadata.role || 'student'
             setUserProfile({
               id: session.user.id,
               email: session.user.email || '',
               full_name: metadata.full_name || '',
               phone: metadata.phone || '',
-              role: metadata.role || 'student',
-              approved: false,
+              role: userRole,
+              approved: userRole === 'admin' ? true : false,
             })
             setUser(session.user)
+          } else {
+            // No session - clear immediately
+            setUser(null)
+            setUserProfile(null)
           }
         } catch (err) {
           // Silently handle - fallback will be used
+          setUser(null)
+          setUserProfile(null)
         } finally {
           if (mounted) {
             setLoading(false)
@@ -161,7 +169,7 @@ export const AuthProvider = ({ children }) => {
           }
         }
       }
-    }, 1500) // Reduced to 1.5 seconds
+    }, 1000) // Reduced to 1 second
 
     // Check initial session
     const initializeAuth = async () => {
@@ -185,33 +193,42 @@ export const AuthProvider = ({ children }) => {
 
         if (session?.user) {
           setUser(session.user)
+          // Fetch profile with timeout - don't wait too long
+          const profilePromise = fetchUserProfile(session.user.id)
+          const timeoutPromise = new Promise((resolve) => {
+            setTimeout(() => resolve(null), 800) // 800ms timeout
+          })
+          
           try {
-            await fetchUserProfile(session.user.id)
+            await Promise.race([profilePromise, timeoutPromise])
           } catch (err) {
             console.error('Error fetching initial profile:', err)
-            // Set a fallback profile if fetch fails
-            if (mounted) {
-              const metadata = session.user.user_metadata || {}
-              setUserProfile({
-                id: session.user.id,
-                email: session.user.email || '',
-                full_name: metadata.full_name || '',
-                phone: metadata.phone || '',
-                role: metadata.role || 'student',
-                approved: false,
-              })
-            }
-          } finally {
-            if (mounted) {
-              setLoading(false)
-              initializationComplete = true
-              if (loadingTimeoutRef.current) {
-                clearTimeout(loadingTimeoutRef.current)
-                loadingTimeoutRef.current = null
-              }
+          }
+          
+          // Set fallback profile if needed
+          if (mounted && !userProfile) {
+            const metadata = session.user.user_metadata || {}
+            const userRole = metadata.role || 'student'
+            setUserProfile({
+              id: session.user.id,
+              email: session.user.email || '',
+              full_name: metadata.full_name || '',
+              phone: metadata.phone || '',
+              role: userRole,
+              approved: userRole === 'admin' ? true : false,
+            })
+          }
+          
+          if (mounted) {
+            setLoading(false)
+            initializationComplete = true
+            if (loadingTimeoutRef.current) {
+              clearTimeout(loadingTimeoutRef.current)
+              loadingTimeoutRef.current = null
             }
           }
         } else {
+          // No session - clear loading immediately
           setUser(null)
           setUserProfile(null)
           setLoading(false)
@@ -252,21 +269,45 @@ export const AuthProvider = ({ children }) => {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
         setUser(session.user)
         setLoading(true)
+        
+        // Create fallback profile from session metadata
+        const metadata = session.user.user_metadata || {}
+        const userRole = metadata.role || 'student'
+        // Admins are always approved in fallback
+        const fallbackProfile = {
+          id: session.user.id,
+          email: session.user.email || '',
+          full_name: metadata.full_name || '',
+          phone: metadata.phone || '',
+          role: userRole,
+          approved: userRole === 'admin' ? true : false,
+        }
+        
+        // Set fallback immediately so UI can render
+        setUserProfile(fallbackProfile)
+        
+        // Set a timeout to ensure loading always clears
+        const loadingTimeout = setTimeout(() => {
+          if (mounted) {
+            setLoading(false)
+          }
+        }, 1000)
+        
+        // Try to fetch real profile with timeout
+        const profilePromise = fetchUserProfile(session.user.id)
+        const timeoutPromise = new Promise((resolve) => {
+          setTimeout(() => resolve(null), 800)
+        })
+        
         try {
-          await fetchUserProfile(session.user.id)
+          await Promise.race([profilePromise, timeoutPromise])
+          // If fetchUserProfile completed, it will have updated userProfile
+          // If it timed out, we already have the fallback profile set
         } catch (err) {
           console.error('Error fetching profile on auth change:', err)
-          // Set fallback profile
-          const metadata = session.user.user_metadata || {}
-          setUserProfile({
-            id: session.user.id,
-            email: session.user.email || '',
-            full_name: metadata.full_name || '',
-            phone: metadata.phone || '',
-            role: metadata.role || 'student',
-            approved: false,
-          })
+          // Fallback already set above
         } finally {
+          clearTimeout(loadingTimeout)
           if (mounted) {
             setLoading(false)
           }

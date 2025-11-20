@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../i18n'
-import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaExclamationTriangle, FaArrowLeft, FaSpinner, FaClock } from 'react-icons/fa'
+import { supabase } from '../lib/supabase'
+import { FaEnvelope, FaLock, FaEye, FaEyeSlash, FaExclamationTriangle, FaArrowLeft, FaSpinner, FaClock, FaTimesCircle } from 'react-icons/fa'
 
 const LoginPage = () => {
   const { signIn, signOut, userProfile, user, loading } = useAuth()
@@ -17,18 +18,49 @@ const LoginPage = () => {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [declinedEnrolment, setDeclinedEnrolment] = useState(null)
+
+  // Check for declined enrolment when user logs in
+  useEffect(() => {
+    const checkDeclinedEnrolment = async () => {
+      if (user && userProfile && !loading && !submitting && userProfile.role !== 'admin') {
+        try {
+          // Check if user has any declined enrolment with a comment
+          const { data: enrolments, error: enrolError } = await supabase
+            .from('enrolments')
+            .select('id, status, admin_comment, reviewed_at, courses(title)')
+            .eq('user_id', user.id)
+            .eq('status', 'declined')
+            .order('reviewed_at', { ascending: false })
+            .limit(1)
+
+          if (!enrolError && enrolments && enrolments.length > 0) {
+            const declined = enrolments[0]
+            if (declined.admin_comment) {
+              setDeclinedEnrolment(declined)
+            }
+          }
+        } catch (err) {
+          console.error('Error checking declined enrolment:', err)
+        }
+      }
+    }
+
+    checkDeclinedEnrolment()
+  }, [user, userProfile, loading, submitting])
 
   // Redirect after login based on approval status
   useEffect(() => {
-    if (user && userProfile && !loading) {
-      if (userProfile.approved === true) {
+    if (user && userProfile && !loading && !submitting) {
+      // Admins are always approved, or if user is approved
+      if (userProfile.role === 'admin' || userProfile.approved === true) {
         // Redirect to portal
         const redirectPath = userProfile.role === 'admin' ? '/admin' : '/dashboard'
         navigate(redirectPath, { replace: true })
       }
-      // If not approved, stay on login page and show pending message
+      // If not approved and not admin, stay on login page and show pending/declined message
     }
-  }, [user, userProfile, loading, navigate])
+  }, [user, userProfile, loading, submitting, navigate])
 
   const handleInputChange = (e) => {
     setFormData({
@@ -60,8 +92,131 @@ const LoginPage = () => {
     }
   }
 
+  // Show declined message if user has declined enrolment with comment
+  if (user && userProfile && !loading && declinedEnrolment && declinedEnrolment.admin_comment) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#1a1a1a',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem',
+      }}>
+        <div style={{
+          maxWidth: '600px',
+          width: '100%',
+          backgroundColor: 'rgba(255,255,255,0.05)',
+          borderRadius: '20px',
+          border: '1px solid rgba(255,255,255,0.1)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          padding: '3rem',
+          textAlign: 'center',
+        }}>
+          <div style={{
+            fontSize: '4rem',
+            marginBottom: '1rem',
+            display: 'flex',
+            justifyContent: 'center',
+            color: '#dc3545',
+          }}>
+            <FaTimesCircle />
+          </div>
+          <h2 style={{
+            color: 'white',
+            marginBottom: '1rem',
+            fontSize: '1.75rem',
+            fontWeight: '700',
+          }}>Enrolment Declined</h2>
+          <div style={{
+            backgroundColor: 'rgba(220, 53, 69, 0.1)',
+            border: '2px solid #dc3545',
+            borderRadius: '12px',
+            padding: '1.5rem',
+            marginBottom: '1.5rem',
+          }}>
+            <p style={{
+              fontSize: '1rem',
+              fontWeight: '600',
+              color: '#dc3545',
+              marginBottom: '0.75rem',
+            }}>
+              STATUS: DECLINED
+            </p>
+            {declinedEnrolment.courses && (
+              <p style={{
+                color: 'rgba(255,255,255,0.8)',
+                fontSize: '0.9rem',
+                marginBottom: '1rem',
+              }}>
+                Course: {declinedEnrolment.courses.title}
+              </p>
+            )}
+            <div style={{
+              backgroundColor: 'rgba(0,0,0,0.2)',
+              borderRadius: '8px',
+              padding: '1rem',
+              marginTop: '1rem',
+            }}>
+              <p style={{
+                color: 'rgba(255,255,255,0.7)',
+                fontSize: '0.875rem',
+                fontWeight: '600',
+                marginBottom: '0.5rem',
+                textAlign: 'left',
+              }}>
+                Administrator Comment:
+              </p>
+              <p style={{
+                color: 'rgba(255,255,255,0.9)',
+                lineHeight: '1.6',
+                fontSize: '0.95rem',
+                textAlign: 'left',
+                fontStyle: 'italic',
+              }}>
+                "{declinedEnrolment.admin_comment}"
+              </p>
+            </div>
+          </div>
+          <p style={{
+            color: 'rgba(255,255,255,0.6)',
+            fontSize: '0.9rem',
+            marginBottom: '1.5rem',
+          }}>
+            Your enrolment has been declined. Please review the administrator's comment above and contact support if you have any questions.
+          </p>
+          <button
+            onClick={signOut}
+            style={{
+              padding: '0.75rem 2rem',
+              backgroundColor: '#dc3545',
+              color: 'white',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#c82333'
+              e.currentTarget.style.transform = 'translateY(-2px)'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#dc3545'
+              e.currentTarget.style.transform = 'translateY(0)'
+            }}
+          >
+            {t('navigation.logout', language)}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   // Show pending message if logged in but not approved
-  if (user && userProfile && !userProfile.approved) {
+  // Don't show if still loading (wait for real profile to load)
+  // Admins are always considered approved
+  if (user && userProfile && !loading && !userProfile.approved && userProfile.role !== 'admin') {
     return (
       <div style={{
         minHeight: '100vh',
@@ -162,8 +317,9 @@ const LoginPage = () => {
     )
   }
 
-  // Show loading while checking auth
-  if (loading || (user && !userProfile)) {
+  // Show loading only if we're actively submitting login OR if we have a user but no profile
+  // Don't show loading if there's no user (just show login form)
+  if ((submitting || (loading && user && !userProfile)) && !error) {
     return (
       <div style={{
         minHeight: '100vh',

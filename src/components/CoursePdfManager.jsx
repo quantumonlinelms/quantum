@@ -13,8 +13,10 @@ const CoursePdfManager = ({ courseId }) => {
     fetchPdfs()
   }, [courseId])
 
-  const fetchPdfs = async () => {
-    setLoading(true)
+  const fetchPdfs = async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true)
+    }
     setError(null)
     
     try {
@@ -35,7 +37,9 @@ const CoursePdfManager = ({ courseId }) => {
       })
       setPdfs([])
     } finally {
-      setLoading(false)
+      if (showLoading) {
+        setLoading(false)
+      }
     }
   }
 
@@ -70,7 +74,7 @@ const CoursePdfManager = ({ courseId }) => {
 
       if (insertError) throw insertError
 
-      fetchPdfs()
+      fetchPdfs(false) // Don't show loading spinner on refresh
       e.target.value = '' // Reset file input
     } catch (error) {
       console.error('Error uploading PDF:', error)
@@ -102,7 +106,7 @@ const CoursePdfManager = ({ courseId }) => {
 
       if (error) throw error
 
-      fetchPdfs()
+      fetchPdfs(false) // Don't show loading spinner on refresh
     } catch (error) {
       console.error('Error deleting PDF:', error)
       alert('Failed to delete PDF')

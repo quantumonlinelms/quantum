@@ -22,10 +22,21 @@ const LessonPage = () => {
     fetchLessonData()
     fetchCourseData()
     checkProgress()
-  }, [lessonId, user])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId])
+  
+  useEffect(() => {
+    if (user) {
+      checkProgress()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user])
 
   const fetchLessonData = async () => {
-    setLoading(true)
+    // Only show loading on initial load, not on refresh
+    if (!lesson) {
+      setLoading(true)
+    }
     try {
       const { data, error } = await supabase
         .from('lessons')
@@ -64,16 +75,28 @@ const LessonPage = () => {
     try {
       const { data, error } = await supabase
         .from('lesson_progress')
-        .select('completed')
+        .select('completed, completed_at')
         .eq('lesson_id', lessonId)
         .eq('user_id', user.id)
-        .single()
+        .maybeSingle()
 
-      if (!error && data) {
-        setCompleted(data.completed)
+      if (error) {
+        // If it's a 406 or other error, just log and continue
+        if (error.code !== 'PGRST116') { // PGRST116 is "not found" which is fine
+          console.warn('Error checking progress:', error)
+        }
+        return
+      }
+
+      if (data) {
+        setCompleted(data.completed === true)
+      } else {
+        setCompleted(false)
       }
     } catch (error) {
       // Progress doesn't exist yet, that's fine
+      console.warn('Error checking lesson progress:', error)
+      setCompleted(false)
     }
   }
 
@@ -89,10 +112,28 @@ const LessonPage = () => {
           user_id: user.id,
           completed: true,
           completed_at: new Date().toISOString(),
+        }, {
+          onConflict: 'lesson_id,user_id'
         })
 
-      if (error) throw error
-      setCompleted(true)
+      if (error) {
+        console.error('Error marking lesson as completed:', error)
+        throw error
+      }
+      
+      // Verify it was saved
+      const { data: verifyData } = await supabase
+        .from('lesson_progress')
+        .select('completed')
+        .eq('lesson_id', lessonId)
+        .eq('user_id', user.id)
+        .single()
+      
+      if (verifyData?.completed) {
+        setCompleted(true)
+      } else {
+        throw new Error('Failed to verify lesson completion')
+      }
     } catch (error) {
       console.error('Error marking lesson as completed:', error)
       alert('Failed to mark lesson as completed')

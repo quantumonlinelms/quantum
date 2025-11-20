@@ -22,8 +22,10 @@ const LessonFileManager = ({ lessonId }) => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const fetchFiles = async () => {
-    setLoading(true)
+  const fetchFiles = async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true)
+    }
     setError(null)
     
     try {
@@ -44,7 +46,9 @@ const LessonFileManager = ({ lessonId }) => {
       })
       setFiles([])
     } finally {
-      setLoading(false)
+      if (showLoading) {
+        setLoading(false)
+      }
     }
   }
 
@@ -92,7 +96,7 @@ const LessonFileManager = ({ lessonId }) => {
 
       if (insertError) throw insertError
 
-      fetchFiles()
+      fetchFiles(false) // Don't show loading spinner on refresh
       e.target.value = '' // Reset file input
     } catch (error) {
       console.error('Error uploading file:', error)
@@ -124,7 +128,7 @@ const LessonFileManager = ({ lessonId }) => {
 
       if (error) throw error
 
-      fetchFiles()
+      fetchFiles(false) // Don't show loading spinner on refresh
     } catch (error) {
       console.error('Error deleting file:', error)
       alert('Failed to delete file')

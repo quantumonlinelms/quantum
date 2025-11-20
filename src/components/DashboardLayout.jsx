@@ -21,11 +21,11 @@ const DashboardLayout = ({ children, isAdmin = false }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024)
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768
+      const mobile = window.innerWidth < 1024
       setIsMobile(mobile)
       if (!mobile) {
         setSidebarOpen(false)
@@ -513,7 +513,7 @@ const DashboardLayout = ({ children, isAdmin = false }) => {
 
       {/* Responsive Styles */}
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 1023px) {
           .sidebar-brand-text,
           .header-brand-text {
             display: none !important;

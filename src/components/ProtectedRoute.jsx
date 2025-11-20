@@ -44,34 +44,9 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/login" replace />
   }
 
-  // If not approved, show pending message
+  // If not approved, redirect to login (LoginPage will show pending message)
   if (!userProfile.approved) {
-    return (
-      <div style={{ padding: '2rem', textAlign: 'center', maxWidth: '600px', margin: '2rem auto' }}>
-        <div style={{
-          border: '2px solid #ffc107',
-          borderRadius: '8px',
-          padding: '2rem',
-          backgroundColor: '#fff3cd',
-        }}>
-          <h2 style={{ color: '#856404', marginBottom: '1rem' }}>Enrolment Pending Approval</h2>
-          <div style={{ color: '#856404' }}>
-            <p style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-              Status: <span style={{ color: '#ff9800' }}>PENDING APPROVAL</span>
-            </p>
-            <p style={{ marginBottom: '1rem' }}>
-              Your registration has been submitted and is currently pending administrator approval.
-            </p>
-            <p style={{ marginBottom: '1rem' }}>
-              An administrator will review your payment receipt and approve your enrolment. Once approved, you will be able to access the student portal and view your courses.
-            </p>
-            <p style={{ fontStyle: 'italic', marginTop: '1rem' }}>
-              Please check back later or contact support if you have any questions.
-            </p>
-          </div>
-        </div>
-      </div>
-    )
+    return <Navigate to="/login" replace />
   }
 
   // User is approved, allow access

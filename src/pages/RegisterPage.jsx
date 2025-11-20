@@ -5,7 +5,7 @@ import { useLanguage } from '../contexts/LanguageContext'
 import { t } from '../i18n'
 import { supabase } from '../lib/supabase'
 import { uploadToCloudflareR2 } from '../lib/cloudflare'
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash, FaBook, FaFileUpload, FaCheckCircle, FaExclamationTriangle, FaArrowLeft, FaSpinner, FaMoneyBillWave } from 'react-icons/fa'
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaEye, FaEyeSlash, FaBook, FaFileUpload, FaCheckCircle, FaExclamationTriangle, FaArrowLeft, FaSpinner, FaMoneyBillWave, FaCopy, FaUniversity } from 'react-icons/fa'
 
 const RegisterPage = () => {
   const navigate = useNavigate()
@@ -27,6 +27,7 @@ const RegisterPage = () => {
   const [success, setSuccess] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [copied, setCopied] = useState(false)
   const submittingRef = useRef(false)
 
   useEffect(() => {
@@ -701,26 +702,112 @@ const RegisterPage = () => {
 
             {/* Deposit Info */}
             {selectedTitle && (
-              <div style={{
-                marginBottom: '1.5rem',
-                padding: '1rem',
-                backgroundColor: 'rgba(255,51,102,0.1)',
-                border: '2px solid #ff3366',
-                borderRadius: '10px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-              }}>
-                <FaMoneyBillWave style={{ fontSize: '1.5rem', color: '#ff3366' }} />
-                <div>
-                  <strong style={{ color: '#ff3366', display: 'block', marginBottom: '0.25rem' }}>
-                    {t('auth.depositRequired', language)}
-                  </strong>
-                  <span style={{ color: 'white', fontSize: '1.1rem', fontWeight: '600' }}>
-                    {(selectedTitle.deposit_amount_birr || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Birr
-                  </span>
+              <>
+                <div style={{
+                  marginBottom: '1rem',
+                  padding: '1rem',
+                  backgroundColor: 'rgba(255,51,102,0.1)',
+                  border: '2px solid #ff3366',
+                  borderRadius: '10px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                }}>
+                  <FaMoneyBillWave style={{ fontSize: '1.5rem', color: '#ff3366' }} />
+                  <div>
+                    <strong style={{ color: '#ff3366', display: 'block', marginBottom: '0.25rem' }}>
+                      {t('auth.depositRequired', language)}
+                    </strong>
+                    <span style={{ color: 'white', fontSize: '1.1rem', fontWeight: '600' }}>
+                      {(selectedTitle.deposit_amount_birr || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Birr
+                    </span>
+                  </div>
                 </div>
-              </div>
+                
+                {/* Bank Account */}
+                <div style={{
+                  marginBottom: '1.5rem',
+                  padding: '1rem',
+                  backgroundColor: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '10px',
+                }}>
+                  <label style={{
+                    display: 'block',
+                    fontSize: '0.875rem',
+                    fontWeight: '600',
+                    color: 'rgba(255,255,255,0.9)',
+                    marginBottom: '0.5rem',
+                  }}>
+                    Bank Account Number
+                  </label>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    borderRadius: '8px',
+                    padding: '0.75rem',
+                  }}>
+                    <FaUniversity style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.6)', flexShrink: 0 }} />
+                    <span style={{
+                      color: 'rgba(255,255,255,0.9)',
+                      fontSize: '0.95rem',
+                      fontFamily: 'monospace',
+                      flex: 1,
+                      userSelect: 'all',
+                      cursor: 'text',
+                    }}>
+                      1234567890
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        navigator.clipboard.writeText('1234567890')
+                        setCopied(true)
+                        setTimeout(() => setCopied(false), 2000)
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: copied ? '#28a745' : 'rgba(255,255,255,0.7)',
+                        cursor: 'pointer',
+                        padding: '0.25rem 0.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        fontSize: '0.875rem',
+                        transition: 'all 0.2s ease',
+                        borderRadius: '4px',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!copied) {
+                          e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'
+                          e.currentTarget.style.color = '#ff3366'
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!copied) {
+                          e.currentTarget.style.backgroundColor = 'transparent'
+                          e.currentTarget.style.color = 'rgba(255,255,255,0.7)'
+                        }
+                      }}
+                    >
+                      {copied ? <FaCheckCircle /> : <FaCopy />}
+                      <span>{copied ? 'Copied!' : 'Copy'}</span>
+                    </button>
+                  </div>
+                  <small style={{
+                    color: 'rgba(255,255,255,0.6)',
+                    fontSize: '0.8rem',
+                    marginTop: '0.5rem',
+                    display: 'block',
+                  }}>
+                    Please transfer the deposit amount to the bank account above
+                  </small>
+                </div>
+              </>
             )}
 
             {/* File Upload */}
